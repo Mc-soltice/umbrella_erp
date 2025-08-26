@@ -8,8 +8,9 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
-     * Transform the resource into an array.
+     * Transforme la ressource en tableau pour la réponse API.
      *
+     * @param Request $request
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
@@ -25,7 +26,6 @@ class UserResource extends JsonResource
             'roles' => $this->getRoleNames(),
             'permissions' => $this->getAllPermissions()->pluck('name'),
 
-            'created_at' => $this->created_at->format('Y-m-d H:i:s'),
         ];
     }
 }

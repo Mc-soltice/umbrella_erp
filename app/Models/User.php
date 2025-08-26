@@ -3,14 +3,16 @@
 namespace App\Models;
 
 use App\Models\LoginAttemps;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Permission\Traits\HasRoles;
+use Spatie\Activitylog\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, HasRoles;
+    use HasApiTokens, HasFactory, HasRoles,LogsActivity;
 
     protected $fillable = [
         'matricule',
@@ -41,4 +43,18 @@ class User extends Authenticatable
         return $this->hasOne(LoginAttempt::class);
     }
 
+        /**
+     * Configure les options de journalisation pour ce modèle.
+     *
+     * @return LogOptions
+     */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly(['first_name', 'last_name', 'email', 'phone', 'is_locked'])
+            ->useLogName('user')
+            ->setDescriptionForEvent(function (string $eventName) {
+                return "User model a subi l'événement : {$eventName}";
+            });
+    }
 }

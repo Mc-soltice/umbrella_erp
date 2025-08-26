@@ -7,6 +7,30 @@ use App\Models\User;
 
 class UserRepository
 {
+    /**
+     * Trouve un utilisateur par son ID.
+     *
+     * @param int $id
+     * @return User|null
+     */
+    public function findById(int $id): ?User
+    {
+        return User::find($id);
+    }
+
+    /**
+     * Met à jour un utilisateur avec de nouvelles données.
+     *
+     * @param User $user
+     * @param array $data
+     * @return User
+     */
+    public function update(User $user, array $data): User
+    {
+        $user->update($data);
+        return $user;
+    }
+
     public function findByEmail(string $email): ?User
     {
         return User::where('email', $email)->first();
@@ -33,11 +57,11 @@ class UserRepository
         return User::create($data);
     }
 
-    public function update(User $user, array $data): User
-    {
-        $user->update($data);
-        return $user;
-    }
+    // public function update(User $user, array $data): User
+    // {
+    //     $user->update($data);
+    //     return $user;
+    // }
 
     public function delete(User $user): bool
     {

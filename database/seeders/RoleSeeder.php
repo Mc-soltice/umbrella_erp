@@ -19,6 +19,9 @@ class RoleSeeder extends Seeder
             'user.create',
             'user.update',
             'user.delete',
+            'user.toggle-lock',
+            'user.view-activity'
+
         ];
 
         foreach ($permissions as $permission) {
@@ -29,7 +32,7 @@ class RoleSeeder extends Seeder
         $comptable = Role::firstOrCreate(['name' => 'comptable']);
         $intendant = Role::firstOrCreate(['name' => 'intendant']);
         $manager = Role::firstOrCreate(['name' => 'manager']);
-        $agent = Role::firstOrCreate(['name' => 'agent']);
+        $responsable = Role::firstOrCreate(['name' => 'responsable']);
         $admin = Role::firstOrCreate(['name' => 'admin']);
 
 
@@ -38,7 +41,7 @@ class RoleSeeder extends Seeder
         $admin->givePermissionTo(Permission::all()); // admin a tout
         $manager->givePermissionTo(['user.view', 'user.update']);
         $intendant->givePermissionTo(['user.view', 'user.update']);
-        $agent->givePermissionTo(['user.view']);
+        $responsable->givePermissionTo(['user.view']);
 
     }
 }
