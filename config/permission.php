@@ -1,6 +1,11 @@
 <?php
 
 return [
+    // // Ajoutez cette section au début du tableau
+    // 'defaults' => [
+    //     'guard' => 'api', // Changez 'web' en 'api'
+    //     'passwords' => 'users',
+    // ],
 
     'models' => [
 

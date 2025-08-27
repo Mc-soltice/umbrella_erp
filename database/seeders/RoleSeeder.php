@@ -19,8 +19,10 @@ class RoleSeeder extends Seeder
             'user.create',
             'user.update',
             'user.delete',
-            'user.toggle-lock',
-            'user.view-activity'
+            'admin.toggle-lock',
+            'admin.view-activity',
+            'attendance.viewAll',
+            'attendance.viewUser',
 
         ];
 

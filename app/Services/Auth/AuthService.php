@@ -1,6 +1,7 @@
 <?php
 namespace App\Services\Auth;
 
+use App\Services\Users\AttendanceService;
 use App\Repositories\Users\UserRepository;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -8,10 +9,12 @@ use App\Models\User;
 class AuthService
 {
     protected $repository;
+    protected $attendanceService;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $repository, AttendanceService $attendanceService)
     {
         $this->repository = $repository;
+        $this->attendanceService = $attendanceService;
     }
 
     public function register(array $data): User
@@ -40,7 +43,7 @@ class AuthService
             }
             return null;
         }
-        
+
         /***** reset les tentatives en cas de succès */
         $user->loginAttempt()->updateOrCreate([], [
             'attempts' => 0,
@@ -48,15 +51,19 @@ class AuthService
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;
-
+        // Au login
+        app(AttendanceService::class)->startSession($user->id);
+        
         return [
             'user' => $user,
             'token' => $token,
         ];
     }
-
+    
     public function logout(User $user): void
     {
+        // Au logout
+        app(AttendanceService::class)->endSession($user->id);
         $user->tokens()->delete();
     }
 }

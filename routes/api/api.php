@@ -4,6 +4,7 @@ use App\Http\Middleware\CheckUserLock;
 use App\Http\Controllers\Users\UserController;
 use App\Http\Controllers\Users\AuthController;
 use App\Http\Controllers\PhpDocTestController;
+use App\Http\Controllers\Users\AttendanceController;
 
 
 /***** Route publique de register le login */
@@ -25,10 +26,18 @@ Route::middleware(['auth:sanctum'])->prefix('users')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::patch('/{user}/toggle-lock', [UserController::class, 'toggleLock'])
-        ->middleware('permission:user.toggle-lock');
-    
+        ->middleware('permission:admin.toggle-lock');
+
     Route::get('/{user}/activity', [UserController::class, 'activity'])
-    ->middleware('permission:user.view-activity');
+        ->middleware('permission:admin.view-activity');
+
+    // Pour tous les utilisateurs
+    Route::get('/attendance', [AttendanceController::class, 'report']);
+        // ->middleware('permission:attendance.viewAll');
+
+    // Pour un utilisateur spécifique
+    Route::get('/attendance/{user}', [AttendanceController::class, 'getByUserAndPeriod'])
+        ->middleware('permission:attendance.viewUser');
 
 });
 
