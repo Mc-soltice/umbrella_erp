@@ -52,14 +52,13 @@ class CandidatureService
 
         // Créer un agent
         $agent = Agent::create([
-            'matricule' => 'AGT'.rand(10000, 99999),
+            'matricule' => 'AGT' . rand(10000, 99999),
             'first_name' => $candidature->first_name,
-            'last_name'  => $candidature->last_name,
-            'location'   => $candidature->location,
-            'phone'      => $candidature->phone,
-            'email'      => $candidature->email,
-            'site_id'    => $site->id,
-            'password'   => bcrypt(Str::random(10)) // mot de passe temporaire
+            'last_name' => $candidature->last_name,
+            'location' => $candidature->location,
+            'phone' => $candidature->phone,
+            'email' => $candidature->email,
+            'site_id' => $site->id,
         ]);
         Log::info("Agent créé à partir de la candidature ID {$candidature->id}, matricule {$agent->matricule}");
 

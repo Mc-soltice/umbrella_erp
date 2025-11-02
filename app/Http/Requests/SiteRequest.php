@@ -20,22 +20,22 @@ class SiteRequest extends FormRequest
         switch ($method) {
             case 'POST': // Création
                 return [
-                    'name'           => 'required|string|max:255|unique:sites,name',
-                    'location'       => 'required|string|max:255',
+                    'name' => 'required|string|max:255',
+                    'location' => 'required|string|max:255',
                     'responsable_id' => 'required|exists:users,id',
                 ];
 
             case 'PUT':
             case 'PATCH': // Mise à jour
                 return [
-                    'name'           => [
+                    'name' => [
                         'sometimes',
                         'required',
                         'string',
                         'max:255',
                         Rule::unique('sites', 'name')->ignore($siteId),
                     ],
-                    'location'       => 'sometimes|required|string|max:255',
+                    'location' => 'sometimes|required|string|max:255',
                     'responsable_id' => 'sometimes|required|exists:users,id',
                 ];
 

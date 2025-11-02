@@ -5,13 +5,14 @@ use App\Http\Controllers\Api\Users\UserController;
 use App\Http\Controllers\Api\Candidatures\CandidatureController;
 use App\Http\Controllers\Api\Sites\SiteController;
 use App\Http\Controllers\Api\Agents\AgentController;
+use App\Http\Controllers\Api\Plannings\PlanningController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('login', [AuthController::class, 'login']);
 Route::post('/register', [UserController::class, 'store']);
 
 
-Route::middleware(['auth:sanctum','checkIfLocked'])->group(function () {
+Route::middleware(['auth:sanctum', 'checkIfLocked'])->group(function () {
 
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index'])
@@ -45,17 +46,17 @@ Route::middleware(['auth:sanctum','checkIfLocked'])->group(function () {
         Route::delete('/{candidature}', [CandidatureController::class, 'destroy'])
             ->middleware('role:gestionnaire|responsable');
 
-        Route::post('/{candidature}/validate', [CandidatureController::class, 'validateCandidature'])
+        Route::post('/validate', [CandidatureController::class, 'validateCandidature'])
             ->middleware('role:gestionnaire|responsable');
     });
 
     // 📂 Module Sites
     Route::prefix('sites')->group(function () {
         Route::get('/', [SiteController::class, 'index'])
-            ->middleware('role:responsable');
+            ->middleware('role:gestionnaire');
 
         Route::post('/', [SiteController::class, 'store'])
-            ->middleware('role:responsable');
+            ->middleware('role:gestionnaire');
 
         Route::get('/{site}', [SiteController::class, 'show'])
             ->middleware('role:responsable');
@@ -84,6 +85,36 @@ Route::middleware(['auth:sanctum','checkIfLocked'])->group(function () {
         Route::delete('/{agent}', [AgentController::class, 'destroy'])
             ->middleware('role:responsable');
     });
+
+
+    // 📂 Module Plannings
+    Route::prefix('plannings')->group(function () {
+
+        Route::get('/', [PlanningController::class, 'index'])
+            ->middleware('role:responsable');
+
+        Route::post('/', [PlanningController::class, 'store'])
+            ->middleware('role:gestionnaire');
+
+        Route::get('planning/{id}', [PlanningController::class, 'show'])
+            ->middleware('role:responsable');
+
+        Route::put('/{planning}', [PlanningController::class, 'update'])
+            ->middleware('role:responsable');
+
+        Route::delete('{planning}', [PlanningController::class, 'destroy'])
+            ->middleware('role:responsable');
+
+        Route::get('{id}/export', [PlanningController::class, 'export'])
+            ->middleware('role:responsable');
+
+        Route::get('/agent/{agentId}/workdays', [PlanningController::class, 'countForAgent'])
+            ->middleware('role:responsable');
+
+        Route::get('/site/{siteId}/workdays', [PlanningController::class, 'countForSite'])
+            ->middleware('role:responsable');
+    });
+
 
 
 });

@@ -28,6 +28,11 @@ class UserService
         return $mat;
     }
 
+        public function getAllUsers()
+    {
+        return $this->repo->getAllUsers();
+    }
+
     public function create(array $data): User
     {
         // préparation des données

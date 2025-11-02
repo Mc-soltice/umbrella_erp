@@ -17,7 +17,6 @@ class Agent extends Model
         'phone',
         'email',
         'site_id',
-        'password'
     ];
 
     // Relation avec site

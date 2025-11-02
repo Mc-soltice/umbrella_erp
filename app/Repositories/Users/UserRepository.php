@@ -28,6 +28,10 @@ class UserRepository
             throw $e;
         }
     }
+    public function getAllUsers()
+    {
+        return User::orderBy('created_at', 'desc')->get();
+    }
 
     public function findByMatricule(string $matricule): ?User
     {
@@ -55,18 +59,6 @@ class UserRepository
         }
     }
 
-    public function paginate(int $perPage = 15)
-    {
-        try {
-            return $this->model->paginate($perPage);
-        } catch (Exception $e) {
-            Log::error('Erreur lors de la pagination des utilisateurs', [
-                'perPage' => $perPage,
-                'message' => $e->getMessage(),
-            ]);
-            throw $e;
-        }
-    }
 
     public function create(array $data): User
     {

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\Candidatures;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CandidatureRequest;
+use App\Http\Requests\ValidateCandidature;
+use App\Http\Resources\Agents\AgentResource;
 use App\Http\Resources\Candidatures\CandidatureResource;
 use App\Models\Candidature;
 use App\Models\Site;
@@ -177,16 +179,10 @@ class CandidatureController extends Controller
      * )
      */
 
-    public function validateCandidature(Candidature $candidature, Request $request)
+    public function validateCandidature(ValidateCandidature $ValidateCandidature)
     {
-        $request->validate(['site_id' => 'required|exists:sites,id']);
-        $site = Site::findOrFail($request->site_id);
-
-        $agent = $this->service->validateCandidature($candidature, $site);
-
-        return response()->json([
-            'message' => 'Candidature validée et agent créé',
-            'agent' => $agent
-        ]);
+        $site = Site::findOrFail($ValidateCandidature->site_id);
+        $candidature = Candidature::findOrFail($ValidateCandidature->candidature_id);
+        return new AgentResource($this->service->validateCandidature($candidature, $site));
     }
 }

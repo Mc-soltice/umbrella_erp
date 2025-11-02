@@ -37,9 +37,7 @@ class UserController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = (int) $request->query('per_page', 15);
-        $users = $this->repo->paginate($perPage);
-        return UserResource::collection($users);
+        return UserResource::collection($this->service->getAllUsers());
     }
 
     /**
